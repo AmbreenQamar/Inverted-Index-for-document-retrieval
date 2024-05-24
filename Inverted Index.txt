@@ -1,0 +1,42 @@
+//Implemented a simple Inverted Index for
+//text document retrieval for the text document collection
+//you can replace the folder
+
+import nltk
+nltk.download('punkt')
+import os
+from nltk.tokenize import word_tokenize
+
+# Function to index words in documents
+def index_documents(directory):
+    index = {}
+    for filename in os.listdir(directory):
+        if filename.endswith(".txt"):
+            with open(os.path.join(directory, filename), "r") as file:
+                document = file.read()
+                sentences = document.split(".")
+                for sentence in sentences:
+                    words = word_tokenize(sentence.lower())
+
+                    # Tokenize words
+                    for word in words:
+                        if word not in index:
+                            index[word] = []
+                        index[word].append(filename)
+    return index
+
+# Function to open documents containing a specific word
+def open_documents_containing_word(word, index, directory):
+    if word in index:
+        for document in index[word]:
+            path_to_document = os.path.join(directory, document)
+            os.system(f'start "" "{path_to_document}"')
+    else:
+        print("Word not found in any documents.")
+
+# Index the documents
+index = index_documents(r"D:\New folder")
+
+# Input a word to search
+word_to_search = input("Enter a word to search for in the documents: ")
+open_documents_containing_word(word_to_search.lower(), index, r"D:\New folder")
